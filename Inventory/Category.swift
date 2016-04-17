@@ -1,55 +1,54 @@
 //
-//  category.swift
+//  Category.swift
 //  Inventory
 //
-//  Created by Michael King on 4/8/16.
+//  Created by Michael King on 4/12/16.
 //  Copyright © 2016 Michael King. All rights reserved.
 //
 
+
 import Foundation
-import Firebase
 
-class Category  {
 
-    private var _catName:    String!
-    private var _subcatName: String!
-    private var _cat_Ref: Firebase!
-    private var _cat_Key: String!
+class Category {
+    
+    var catKey: String!
+    var categoryName: String?
+    var subcategoryName: String?
+    var newCatStartingNumber : Int?
+    var lastCatStartingNumber:  Int?
+    
+    
+    
+    
+    
+    init(categoryName: String?, subcategoryName: String?) {
+        self.categoryName = categoryName
+        self.subcategoryName = subcategoryName
 
-    
-    var catName: String {
-        return _catName
-        
     }
+
+    init (catKey: String, dictionary: Dictionary <String, AnyObject> ) {
+        self.catKey = catKey
     
-    var subcatName: String {
-        return _subcatName
-    }
-    
-    
-    var catKey: String {
-        return _cat_Key
-        
-    }
-    
-    init(catName: String, subcatName: String ) {
-        
-        self._catName = catName
-        self._subcatName = subcatName
-    }
-    
-    init (catKey: String, dictionary: Dictionary <String, AnyObject>) {
-        self._cat_Key = catKey
-        
-        if let catName = dictionary["catName"] as? String {
-            self._catName = catName
+        if let categoryName = dictionary["catName"] as? String {
+            self.categoryName = categoryName
         }
         
-        if let subcatName = dictionary["subcatName"] as? String {
-            self._subcatName = subcatName
+        if let subcategoryName = dictionary["subName"] as? String {
+            self.subcategoryName = subcategoryName
         }
         
-        self._cat_Ref = DataService.ds.REF_CATEGORY.childByAppendingPath(self._cat_Key)
+        if let newCatStartingNumber = dictionary["newCatStartingNumber"] as? Int {
+            self.newCatStartingNumber = newCatStartingNumber
+        }
+        
+        if let lastCatStartingNumber = dictionary["lastCatStartingNumber"] as? Int {
+            self.lastCatStartingNumber = lastCatStartingNumber
+        }
+        
     }
+    
 
+    
 }

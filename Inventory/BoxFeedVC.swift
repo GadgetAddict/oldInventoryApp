@@ -1,5 +1,5 @@
 //
-//  WineTableVC.swift
+//  BoxFeedVC
 //  Inventory
 //
 //  Created by Michael King on 4/3/16.
@@ -7,90 +7,192 @@
 //
 
 import UIKit
+import Firebase
+import ActionSheetPicker_3_0
 
-class BoxFeedVC: UITableViewController, UISearchResultsUpdating {
-    
-    let appleProducts = ["Mac", "iPhone", "Apple Watch", "iPad"]
-    var filteredAppleProducts = [String]()
-    var resultSearchController = UISearchController()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.resultSearchController = ({
-            let controller = UISearchController(searchResultsController: nil)
-            controller.searchResultsUpdater = self
-            controller.dimsBackgroundDuringPresentation = false
-            controller.searchBar.sizeToFit()
-            
-            self.tableView.tableHeaderView = controller.searchBar
-            
-            return controller
-        })()
-        
-        // Reload the table
-        self.tableView.reloadData()
-    }
+class BoxFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate {
+let tealColor = UIColor(red: 0, green: 180, blue: 225)
+let grayColor = UIColor(red: 205, green: 205, blue: 205)
 
- 
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
+    @IBOutlet weak var newBoxButton: styledButton!
+    @IBOutlet weak var saveButtonOutlet: styledButton!
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-       
-        if self.resultSearchController.active {
-            
-            return self.filteredAppleProducts.count
-            
-            } else {
-            
-            return self.appleProducts.count
-            
-        }
-    }
+    var nextBoxNumber: Int!
+    var categories = [String]()     // stores category names
+    var catStartNumber = [Int]()    //stores category start numbers for adding new boxes
+    var newBoxCategory : String!
     
- 
-     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    @IBAction func doneBtn(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+  }
+    
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var newBoxLbl: UILabel!
+    
+    @IBAction func newBoxBtn(sender: UIButton) {
      
-        let cell = tableView.dequeueReusableCellWithIdentifier("BoxCell", forIndexPath: indexPath) as UITableViewCell
+        //change color of buttons
+        self.saveButtonOutlet.backgroundColor = self.grayColor
         
-        if (self.resultSearchController.active) {
-            cell.textLabel?.text = self.filteredAppleProducts[indexPath.row]
-                
-            } else {
-                
-            cell.textLabel?.text = self.appleProducts[indexPath.row]
+        ActionSheetStringPicker.showPickerWithTitle("Choose Category", rows: categories, initialSelection: 0, doneBlock: {
+             picker, value, index in
+            self.getLastBoxNumber(value)
+            self.newBoxCategory = index as! String
+            return
+            }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
  
-            
-            }
-            
-            return cell
-            
-        }
+    }//end newBoxBtn
+    
+    func getLastBoxNumber (category: Int!) {
+ 
+             let categoryStartingNumber = catStartNumber[category]
+            print("CategoryStarting NUmber\(categoryStartingNumber)")
+        
+        
+        
+                  DataService.ds.REF_BOXES.observeEventType(.Value, withBlock: { snapshot in
+                    if snapshot.value is NSNull {
+                                  print("snapshotValue is NULL")
+                        self.nextBoxNumber = categoryStartingNumber
 
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
+                    } else {
+         
+                   let endingNum = categoryStartingNumber + 99
+                DataService.ds.REF_BOXES.queryOrderedByChild("boxNum").queryLimitedToLast(1).queryStartingAtValue(categoryStartingNumber).queryEndingAtValue(endingNum).observeEventType(.ChildAdded, withBlock: { snapshot in
+                    
+                    if let temp = snapshot.value["boxNum"] as? Int {
+          
+                        
+                // add 1 to last box number to make the next box number to be created
+                  self.nextBoxNumber = temp + 1
+                        self.newBoxLbl.text = "Number \(self.nextBoxNumber)"
+                    }
+
+                    }
+                )
+                   
+                    }
+        }
+    )
+        print("nextBoxDummy \(self.nextBoxNumber)")
+        self.newBoxButton.backgroundColor = self.grayColor
+        self.saveButtonOutlet.backgroundColor = self.tealColor
+    
+}//end func
+    
+    
         
-        filteredAppleProducts.removeAll(keepCapacity: false)
         
-        let searchPredicate = NSPredicate(format: "SELF CONTAINS[c] %@", searchController.searchBar.text!)
         
-        let array = (appleProducts as NSArray).filteredArrayUsingPredicate(searchPredicate)
+    
+
+    
+    @IBAction func saveBoxBtn(sender: AnyObject) {
         
-        filteredAppleProducts = array as! [String]
+        self.newBoxButton.backgroundColor = self.tealColor
+        self.saveButtonOutlet.backgroundColor = self.grayColor
+        self.newBoxLbl.text = ""
+
+        let firebaseRef = DataService.ds.REF_BOXES
         
-        self.tableView.reloadData()
+        let newBox = ["boxNum": self.nextBoxNumber, "fragile": "false", "boxCategory": self.newBoxCategory, "status":"empty", "location":"none", "location_detail":"none", "location_shelf":"none"]
+        
+        let newboxRef = firebaseRef.childByAutoId()
+        newboxRef.setValue(newBox)
+     self.tableView.reloadData()
     }
     
     
+    var boxes = [Box]()
     
-    
-    
-    
-    
-    
-    
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            loadCatsFromFirebase()
+               newBoxLbl.text = ""
+            tableView.dataSource = self
+            tableView.delegate = self
+            tableView.estimatedRowHeight = 158
+            
+            
+             DataService.ds.REF_BOXES.queryOrderedByChild("boxNum").observeEventType(.Value, withBlock:   { snapshot in
+                
+                self.boxes = []
+                if let snapshots = snapshot.children.allObjects as? [FDataSnapshot] {
+                    
+                    for snap in snapshots {
+                       print("SNAP: \(snap)")
+                        
+                        if let boxDict = snap.value as? Dictionary<String, AnyObject> {
+                            let key = snap.key
+                            let box = Box(boxKey: key, dictionary: boxDict)
+                            self.boxes.append(box)
+                        }
+                    }
+                }
+                
+                self.tableView.reloadData()
+             })
     }
+      // MARK: - Load Categories for New Box Method
+   
+    func loadCatsFromFirebase() {
+        
+        DataService.ds.REF_CATEGORY.queryOrderedByChild("catName").observeEventType(.ChildAdded, withBlock: { snapshot in
+     
+                let catNames = snapshot.value["catName"] as! String
+                let startNum = snapshot.value["startingNumber"] as! Int
+            
+                self.categories.append(catNames)
+
+                self.catStartNumber.append(startNum)
+        })
+    }
+
+    
+
+    
+    
+    
+    
+        // MARK: - Table view data source
+    
+         func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+            
+            return 1
+        }
+        
+         func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+              return boxes.count
+        }
+        
+        
+         func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+
+            if let cell  = tableView.dequeueReusableCellWithIdentifier("BoxCell") as? BoxCell {
+        
+                    let box = boxes[indexPath.row]
+                    cell.configureCell(box)
+                
+                    
+                    return cell
+                } else {
+                        return BoxCell()
+                    }
+ }//tableView
+    
+   
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        print("Going to BoxDetails")
+        if segue.identifier == "sendBoxNum" {
+            
+            if let destination = segue.destinationViewController as? BoxDetailVC {
+                 
+                let cat = "" //(boxNumber.text)
+                destination.passedBoxNumber = cat
+            }
+        }
+    }
+
+   
+}

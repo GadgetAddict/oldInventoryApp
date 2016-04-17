@@ -10,17 +10,15 @@ import UIKit
 import Firebase
 
 
-protocol DestinationViewDelegate {
-    func setCats(subcategory: String)
-    
-    }
     
     
 class SubcategoryVC: UITableViewController {
     
-    var delegate: DestinationViewDelegate! = nil
    
+    var category: Category?
+    
     var passedCategory : String! = nil
+    
     
         @IBAction func cancelButton(sender: AnyObject) {
             self.dismissViewControllerAnimated(true, completion: nil)
@@ -33,8 +31,7 @@ class SubcategoryVC: UITableViewController {
         override func viewDidLoad() {
             super.viewDidLoad()
             loadDataFromFirebase()
-            print("Passed Category: \(passedCategory)")
-        }
+                     }
         
         
         // MARK: - Table view data source
@@ -91,7 +88,7 @@ class SubcategoryVC: UITableViewController {
                 var tempArray = [NSDictionary]()
                 
                 for snap in snapshot.children {
-                    print("Snaps: \(snap)")
+                    print("SnapSubCats: \(snap)")
                     let child = snap as! FDataSnapshot
                     let dict = child.value as! NSDictionary
                     tempArray.append(dict)
@@ -103,43 +100,36 @@ class SubcategoryVC: UITableViewController {
                 
             })
     }
-            override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-                let dict = items[indexPath.row]
-                
-                  let selectedSub = dict["subname"] as! String
-                let selectedCrap = dict[value]
-                
-                delegate.setCats(selectedSub)
-                print("afer the delegate")
-                self.navigationController?.popToRootViewControllerAnimated(true)
-          
-                }
-    
+     
 
-    
+    //Unwind segue
+    @IBAction func unwindWithNewSubcat(segue:UIStoryboardSegue) {
+       
+    }
  
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        print("lets add new SUBS")
-        
-        if segue.identifier == "SendSubCatDataSegue" {
-     
-            if let destination = segue.destinationViewController as? NewSubcategoryVC {
+         if segue.identifier == "saveCategoryDetail" {
+            if let cell = sender as? UITableViewCell {
+                let indexPath = tableView.indexPathForCell(cell)
+                let dict = items[indexPath!.row]
+                let subname = dict["subname"] as! String
                 
-              destination.passedCat = (passedCategory)!
+                    category = Category(categoryName: passedCategory, subcategoryName: subname)
               
+                }
+        }
+  
+        if segue.identifier == "SendSubCatDataSegue" {
+            print("lets add new SUBS")
+
+            if let destination = segue.destinationViewController as? NewSubcategoryVC {
+
+            destination.passedCat = (passedCategory)!
+                
             }
         }
     }
     
-//            override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-//                if segue.identifier == "SaveSelectedGame" {
-//                    if let cell = sender as? UITableViewCell {
-//                        let indexPath = tableView.indexPathForCell(cell)
-//                        if let index = indexPath?.row {
-//                            print(index)
-//                            selectedGame = games[index]
-//                            print(selectedGame)
-//                        }
-//    
+   
 } //end class

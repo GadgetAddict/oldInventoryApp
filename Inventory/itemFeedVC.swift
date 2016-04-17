@@ -16,13 +16,12 @@ class itemFeedVC: UIViewController, UITableViewDataSource, UITableViewDelegate,U
 
     @IBOutlet weak var tableView: UITableView!
     
-    
     var items = [Item]()
+    
     static var imageCache = NSCache()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -30,21 +29,21 @@ class itemFeedVC: UIViewController, UITableViewDataSource, UITableViewDelegate,U
   
     DataService.ds.REF_ITEMS.observeEventType(.Value, withBlock: { snapshot in
             
-       self.items = []
-        if let snapshots = snapshot.children.allObjects as? [FDataSnapshot] {
+    self.items = []
+    if let snapshots = snapshot.children.allObjects as? [FDataSnapshot] {
             
-                for snap in snapshots {
-                    print("SNAP: \(snap)")
-                
-                if let itemDict = snap.value as? Dictionary<String, AnyObject> {
-                    let key = snap.key
-                    let item = Item(itemKey: key, dictionary: itemDict)
-                    self.items.append(item)
-                }
+            for snap in snapshots {
+                print("SNAP: \(snap)")
+            
+            if let itemDict = snap.value as? Dictionary<String, AnyObject> {
+                let key = snap.key
+                let item = Item(itemKey: key, dictionary: itemDict)
+                self.items.append(item)
             }
-            
         }
-            
+        
+    }
+        
             self.tableView.reloadData()
         
     })
@@ -89,6 +88,12 @@ class itemFeedVC: UIViewController, UITableViewDataSource, UITableViewDelegate,U
     
    
  
+    // Mark: Unwind Segues
+    @IBAction func saveNewItemBackToFeed(segue:UIStoryboardSegue) {
+        if let newItemViewController = segue.sourceViewController as? NewItemVC {
+            
+        }
+    }
     
     
     

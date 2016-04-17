@@ -17,7 +17,7 @@ class NewSubcategoryVC: UITableViewController {
         @IBOutlet weak var newSubcategoryTextField: UITextField!
         
         @IBAction func cancelButton(sender: AnyObject) {
-            self.dismissViewControllerAnimated(true, completion: nil)
+            navigationController?.popViewControllerAnimated(true)
             
         }
         
@@ -27,10 +27,11 @@ class NewSubcategoryVC: UITableViewController {
          
         }
         
-        @IBAction func save(sender: AnyObject) {
+        @IBAction func saveSubCat(sender: AnyObject) {
             let newSubcategory = newSubcategoryTextField.text
-            
-            let newSubcat = ["subname":newSubcategory!]
+            let newSubTrimmed = newSubcategory!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+ 
+            let newSubcat = ["subname":newSubTrimmed]
             let firebasePost = DataService.ds.REF_CATEGORY.childByAppendingPath(passedCat).childByAppendingPath("subcats").childByAutoId()
             firebasePost.setValue(newSubcat)
             
@@ -46,7 +47,7 @@ class NewSubcategoryVC: UITableViewController {
         
         
         override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-            if indexPath.section == 0 && indexPath.row == 0 {
+            if indexPath.row == 0 {
                 newSubcategoryTextField.becomeFirstResponder()
             }
             tableView.deselectRowAtIndexPath(indexPath, animated: true)

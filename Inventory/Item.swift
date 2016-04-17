@@ -15,13 +15,18 @@ class Item  {
     private var _itemImgUrl: String?
     private var _itemName:String!
     private var _itemDescript: String?
-    private var _itemCategory: Int?
-    private var _itemSubcategory: Int?
+    private var _itemCategory: String?
+    private var _itemSubcategory: String?
     private var _itemBoxNum: Int?
     private var _itemQty: Int?
     private var _itemFragile: Bool!
+    private var _itemColor: String?
 
+    
 
+    var itemColor: String? {
+        return _itemColor
+    }
     
     var itemName: String {
         return _itemName
@@ -36,11 +41,11 @@ class Item  {
     }
  
 
-    var itemCategory: Int? {
+    var itemCategory: String? {
         return _itemCategory
     }
 
-    var itemSubcategory: Int? {
+    var itemSubcategory: String? {
         return _itemSubcategory
     }
 
@@ -57,7 +62,7 @@ class Item  {
     }
 
 
-    init(name: String, description: String, category: Int, subcategory: Int, qty: Int, fragile: Bool, itemInBox: Int) {
+    init(name: String, description: String, category: String, subcategory: String, qty: Int, fragile: Bool, itemInBox: Int, itemColor: String) {
         self._itemName = name
         self._itemImgUrl = itemImgUrl
         self._itemDescript = description
@@ -66,7 +71,7 @@ class Item  {
         self._itemBoxNum = itemInBox
         self._itemQty = qty
         self._itemFragile = fragile
-
+        self._itemColor = itemColor
         }
 
     init(itemKey: String, dictionary: Dictionary <String, AnyObject> ) {
@@ -81,10 +86,10 @@ class Item  {
         if let description = dictionary["itemDescript"] as? String {
             self._itemDescript = description
         }
-        if let category = dictionary["itemCategory"] as? Int {
+        if let category = dictionary["itemCategory"] as? String {
             self._itemCategory = category
         }
-        if let subcategory = dictionary["itemSubcategory"] as? Int {
+        if let subcategory = dictionary["itemSubcategory"] as? String {
             self._itemSubcategory = subcategory
         }
         if let itemInBox = dictionary["itemInBox"] as? Int {
@@ -95,6 +100,10 @@ class Item  {
         }
         if let fragile = dictionary["itemFragile"] as? Bool {
             self._itemFragile = fragile
+        }
+        
+        if let color = dictionary["itemColor"] as? String {
+            self._itemColor = color
         }
         self._itemRef = DataService.ds.REF_ITEMS.childByAppendingPath(self._itemKey)
        }

@@ -14,6 +14,7 @@ class Box  {
     private var _boxRef: Firebase!
     private var _boxNumber: Int!
     private var _boxFragile: Bool!
+    private var _boxCategory: String!
     private var _boxDescript: String?
     private var _boxLocationGeo: String!
     private var _boxLocationDetail: String?
@@ -32,6 +33,10 @@ class Box  {
         return _boxFragile
     }
     
+    var boxCategory:String? {
+        return _boxCategory
+    }
+
     var boxDescript:String? {
         return _boxDescript
     }
@@ -49,9 +54,10 @@ class Box  {
     }
     
     
-    init(number: String, fragile: Bool, description: String, located : String, locDetail: String, locShelf : String) {
+    init(number: String, fragile: Bool, category: String,  description: String, located : String, locDetail: String, locShelf : String) {
         self._boxNumber = boxNumber
         self._boxFragile = fragile
+        self._boxCategory = category
         self._boxDescript = description
         self._boxLocationGeo = located
         self._boxLocationDetail = locDetail
@@ -65,11 +71,15 @@ class Box  {
             self._boxFragile = fragile
         }
         
+        if let category = dictionary["boxCategory"] as? String {
+            self._boxCategory  =  category
+        }
+        
         if let description = dictionary["description"] as? String {
             self._boxDescript  =  description
         }
         
-        if let boxNumber = dictionary["boxNumber"] as? Int {
+        if let boxNumber = dictionary["boxNum"] as? Int {
              self._boxNumber = boxNumber
         }
         
@@ -87,6 +97,8 @@ class Box  {
         
         self._boxRef = DataService.ds.REF_BOXES.childByAppendingPath(self._boxKey)
     }
+    
+
     
 } // class
 

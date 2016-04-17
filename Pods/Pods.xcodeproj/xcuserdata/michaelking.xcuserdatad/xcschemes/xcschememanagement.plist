@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>ActionSheetPicker-3.0.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Alamofire.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -52,7 +57,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D72CB5607C143800C9CD4F9096EEAB4E</key>
+		<key>C2CE15C148F79EDBBACBCA80DE838214</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CE0A701D8A271EFE0065667D13272921</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -39,5 +39,4 @@ class addWineVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     
     
     
-    
 }//end VC

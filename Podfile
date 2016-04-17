@@ -8,5 +8,6 @@ pod 'Firebase'
 pod 'Alamofire', '~> 3.0' 
 pod 'Cosmos', '~> 1.2'
 pod 'IQKeyboardManagerSwift'
-end
+pod 'ActionSheetPicker-3.0', '~> 2.0.5'
+ end
 

@@ -9,10 +9,37 @@
 import UIKit
 import Firebase
 import Alamofire
+import ActionSheetPicker_3_0
+
+class NewItemVC: UIViewController, UIImagePickerControllerDelegate , UINavigationControllerDelegate {
 
 
-class NewItemVC: UIViewController, UIImagePickerControllerDelegate , UINavigationControllerDelegate, DestinationViewDelegate {
+ 
+    func nameSwitchAction(nameSwitch: UISwitch) {
+        if nameSwitch.on {
+            customName = false
+            //print("I turned it on")
+            if categoryLbl.text == "Category" {
+                nameField.placeholder = "Set Category"
+            } else {
+                nameField.text = "\(categoryLbl.text!) \(subCategoryLbl.text!)"
 
+            }
+            
+        } else {
+            customName = true
+             //print("I turned it off")
+            nameField.text = ""
+            nameField.placeholder = "Enter Item Name"
+            
+        }
+    }
+    
+ 
+    @IBAction func addToBoxBtn(sender: AnyObject) {
+    
+        
+    } // end Send To Box
  
     
     @IBOutlet weak var categoryLbl: UILabel!
@@ -21,6 +48,8 @@ class NewItemVC: UIViewController, UIImagePickerControllerDelegate , UINavigatio
     
     @IBOutlet weak var colorLbl: UILabel!
   
+    @IBOutlet weak var chooseColorBtn: UIButton!
+    
     var item = [Item]()
     
     // Set up Image
@@ -46,22 +75,27 @@ class NewItemVC: UIViewController, UIImagePickerControllerDelegate , UINavigatio
     @IBOutlet weak var nameField: styledTextField!
     @IBOutlet weak var descriptionField:UITextView!
     
-     @IBOutlet weak var fragilePicker: UISwitch!
+    @IBOutlet weak var nameSwitch: UISwitch!
+    @IBOutlet weak var fragilePicker: UISwitch!
     @IBOutlet weak var qtyField: styledTextField!
     
-  
+   var customName : Bool = true
     var fragileStatus : String! = "no"
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         colorLbl.hidden = true
         subCategoryLbl.hidden = true
+        chooseColorBtn.hidden = true
+        
         
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         
-        fragilePicker.addTarget(self, action: #selector(NewItemVC.switchIsChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
- 
+        fragilePicker.addTarget(self, action: #selector(NewItemVC.itemIsFragile(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        
+        nameSwitch.addTarget(self, action: #selector(NewItemVC.nameSwitchAction(_:)), forControlEvents: UIControlEvents.ValueChanged)
     }
     
  
@@ -75,12 +109,10 @@ class NewItemVC: UIViewController, UIImagePickerControllerDelegate , UINavigatio
 
    
     @IBAction func SaveNewItem(sender: AnyObject) {
-      print("user clicked save")
-        
-    if let txt = nameField.text where txt != "" {
+        //Begin Process to Convert Data for Saving as long as Name field is not empty
+    if let txt = nameField.text where txt != "" , let desc = descriptionField.text where desc != "" {
     
     if let img = imageThumbnail.image where imageSelected == true {
- 
     let urlStr = "https://post.imageshack.us/upload_api.php"
 
     let url = NSURL(string: urlStr)!
@@ -110,7 +142,6 @@ class NewItemVC: UIViewController, UIImagePickerControllerDelegate , UINavigatio
     if let imgLink = links["image_link"] as? String {
     print("LINK: \(imgLink)")
     self.itemToFirebase(imgLink)
-        
                 }
             }
         }
@@ -120,20 +151,20 @@ class NewItemVC: UIViewController, UIImagePickerControllerDelegate , UINavigatio
     print(error)
     
     } //end switch
-    
     } // end encoding result in
-    
             }//ifLetImage
         } else {
+        
+          self.showErrorAlert("Item Not Saved", msg: "Item name and description are required")
     self.itemToFirebase(nil)
+        
     }
-    
-     navigationController?.popViewControllerAnimated(true)
-
+        self.dismissViewControllerAnimated(true, completion: nil)
+print("user clicked save")
 }
-   
-    func switchIsChanged(mySwitch: UISwitch) {
-        if mySwitch.on {
+    
+    func itemIsFragile(fragilePicker: UISwitch) {
+        if fragilePicker.on {
             fragileStatus = "yes"
         } else {
             fragileStatus = "no"
@@ -156,41 +187,62 @@ func itemToFirebase(imgUrl: String?) {
     }
     
     let firebaseItem = DataService.ds.REF_ITEMS.childByAutoId()
+    
     firebaseItem.setValue(item)
     
-    } //save item ToFirebase
+    imageSelected = false
+       print("reset ImageSelected to False")
+  
+    
+    }   
  
-//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-//        if segue.identifier == "SavePlayerDetail" {
-//            player = Player(name: nameTextField.text, game:game, rating: 1)
-//        }
-//            }
-//    
-//    //Unwind segue
-//    @IBAction func unwindWithSelectedGame(segue:UIStoryboardSegue) {
-//        if let NewSubcategoryVC = segue.sourceViewController as? NewSubcategoryVC,
-//            passedCategory = NewSubcategoryVC.selectedCategory {
-//            newcategory = selectedCategory
-//        }
-//            passedSubcategory = NewSubcategoryVC.selectedSubcategory {
-//            newSubcategory = selectedSubcategory
-//        }
-//    }
-//    
-    
-    
-    // Mark Unwind Segues
+    // Mark: Unwind Segues
     @IBAction func cancelToNewItemViewController(segue:UIStoryboardSegue) {
+      self.dismissViewControllerAnimated(true, completion: nil)
     }
  
   
-    
-    // Called from the destination controller via delegation
-    func setCats(subcategory: String) {
-        categoryLbl.text = "category"
-        subCategoryLbl.text = subcategory
+ 
+    @IBAction func saveCategoryDetail(segue:UIStoryboardSegue) {
+            if let SubcategoryView = segue.sourceViewController as? SubcategoryVC {
+                
+                subCategoryLbl.hidden = false
          
+                
+                if let cats = SubcategoryView.category {
+                    subCategoryLbl.text = cats.subcategoryName
+                    categoryLbl.text = cats.categoryName
+                    
+                    if cats.categoryName == "Light" {
+                        colorLbl.hidden = false
+                        chooseColorBtn.hidden = false
+                        nameField.text = "\(cats.subcategoryName!) \(cats.categoryName!)"
+                    }
+                }
+        } //end if let subcateg
+    }//end saveCategoryDetail
+    
+ 
+    
+    //Unwind segue
+    @IBAction func unwindWithSelectedColor(segue:UIStoryboardSegue) {
+        if let lightColorPicker = segue.sourceViewController as? colorsVC,
+            selectedColor = lightColorPicker.selectedColor {
+            let color = selectedColor
+            colorLbl.text = color
+        }
     }
+    
+    
+
+    func showErrorAlert(title: String, msg: String) {
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .Alert)
+        let action = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+        alert.addAction(action)
+        presentViewController(alert, animated: true, completion: nil)
+    }
+    
+  
     
     
     

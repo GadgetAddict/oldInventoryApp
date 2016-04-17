@@ -1,16 +1,19 @@
 PODS:
+  - ActionSheetPicker-3.0 (2.0.5)
   - Alamofire (3.3.0)
   - Cosmos (1.2.2)
   - Firebase (2.5.1)
   - IQKeyboardManagerSwift (4.0.1)
 
 DEPENDENCIES:
+  - ActionSheetPicker-3.0 (~> 2.0.5)
   - Alamofire (~> 3.0)
   - Cosmos (~> 1.2)
   - Firebase
   - IQKeyboardManagerSwift
 
 SPEC CHECKSUMS:
+  ActionSheetPicker-3.0: 8312778b6815578e6a86d630fbcf31dc94c534e7
   Alamofire: 9054db4a1b1ca9e363223183e01cea380159a27c
   Cosmos: 87c49100c69d2cb2eebfa4eb8d1e801fe29ff774
   Firebase: 3565ea88b830f28f2c77ecc524622bc71a20d085

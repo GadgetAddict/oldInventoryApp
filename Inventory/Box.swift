@@ -19,6 +19,11 @@ class Box  {
     private var _boxLocationGeo: String!
     private var _boxLocationDetail: String?
     private var _boxLocationShelf: String?
+    private var _itemName: String?
+    private var _itemFrag: Bool?
+    private var _itemCat: String?
+    
+ 
     
     
     var boxKey: String! {
@@ -53,6 +58,19 @@ class Box  {
         return _boxLocationShelf
     }
     
+    var itemName: String? {
+        return _itemName
+
+    }
+    var itemFrag: Bool? {
+        return _itemFrag
+    }
+    var itemCat: String? {
+        return _itemCat
+    }
+        
+        
+        
     
     init(number: String, fragile: Bool, category: String,  description: String, located : String, locDetail: String, locShelf : String) {
         self._boxNumber = boxNumber
@@ -98,7 +116,14 @@ class Box  {
         self._boxRef = DataService.ds.REF_BOXES.childByAppendingPath(self._boxKey)
     }
     
+    init(itemName: String, itemFrag: Bool, itemCat: String) {
+        self._itemName = itemName
+        self._itemFrag = itemFrag
+        self._itemCat = itemCat
+        
+    }
 
+    
     
 } // class
 

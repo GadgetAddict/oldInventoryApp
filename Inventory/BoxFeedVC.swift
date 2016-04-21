@@ -9,11 +9,14 @@
 import UIKit
 import Firebase
 import ActionSheetPicker_3_0
+import SwiftOverlays
 
 class BoxFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate {
 let tealColor = UIColor(red: 0, green: 180, blue: 225)
 let grayColor = UIColor(red: 205, green: 205, blue: 205)
 
+    @IBOutlet var annoyingNotificationView: UIView?
+ 
     
     @IBOutlet weak var newBoxButton: styledButton!
     @IBOutlet weak var saveButtonOutlet: styledButton!
@@ -22,6 +25,8 @@ let grayColor = UIColor(red: 205, green: 205, blue: 205)
     var categories = [String]()     // stores category names
     var catStartNumber = [Int]()    //stores category start numbers for adding new boxes
     var newBoxCategory : String!
+    
+    
     
     @IBAction func doneBtn(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
@@ -103,11 +108,14 @@ let grayColor = UIColor(red: 205, green: 205, blue: 205)
      self.tableView.reloadData()
     }
     
-    
+  
     var boxes = [Box]()
     
         override func viewDidLoad() {
             super.viewDidLoad()
+            
+           
+
             loadCatsFromFirebase()
                newBoxLbl.text = ""
             tableView.dataSource = self
@@ -182,17 +190,63 @@ let grayColor = UIColor(red: 205, green: 205, blue: 205)
  }//tableView
     
    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        print("Going to BoxDetails")
-        if segue.identifier == "sendBoxNum" {
-            
-            if let destination = segue.destinationViewController as? BoxDetailVC {
-                 
-                let cat = "" //(boxNumber.text)
-                destination.passedBoxNumber = cat
-            }
-        }
-    }
-
+  
    
+    
+        
+        var beginTimer: NSTimer?
+        var endTimer: NSTimer?
+        
+        var progress = 0.0
+        
+    
+    
+    
+        override func viewWillDisappear(animated: Bool) {
+            super.viewWillDisappear(animated)
+            
+            if let beginTimer = beginTimer {
+                beginTimer.invalidate()
+            }
+            
+            if let endTimer = endTimer {
+                endTimer.invalidate()
+            }
+            
+            SwiftOverlays.removeAllBlockingOverlays()
+        }
+        
+        // MARK: begin notification
+        func begin() {
+            
+            
+            NSBundle.mainBundle().loadNibNamed("AnnoyingNotification", owner: self, options: nil)
+            annoyingNotificationView!.frame.size.width = self.view.bounds.width;
+            
+            UIViewController.showNotificationOnTopOfStatusBar(annoyingNotificationView!, duration: 5)
+            // Or SwiftOverlays.showAnnoyingNotificationOnTopOfStatusBar(annoyingNotificationView!, duration: 5)
+            
+      
+            
+            
+            
+            if let endTimer = endTimer {
+                endTimer.invalidate()
+            }
+            
+            endTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: #selector(end), userInfo: nil, repeats: false)
+        }
+        
+        func end() {
+            
+            
+            if let beginTimer = beginTimer {
+                beginTimer.invalidate()
+            }
+            
+            beginTimer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: #selector(begin), userInfo: nil, repeats: false)
+        }
+    
+ 
+ 
 }

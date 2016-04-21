@@ -22,7 +22,12 @@ class ItemCell: UITableViewCell {
     @IBOutlet weak var cartoonBoxClosed: UIImageView!
     @IBOutlet weak var boxNumberLbl: UILabel!
     @IBOutlet weak var imgFragile: UIImageView!
+    @IBAction func boxNumberScanBtn(sender: AnyObject) {
+        //open QR Reader to scan box number - add's box number as Item's keeper
+        
+    }
     
+    @IBOutlet weak var boxNumberScanBtnLbl: UIButton!
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -37,10 +42,11 @@ class ItemCell: UITableViewCell {
         self.subCategoryLbl.text = "\(item.itemSubcategory!)"
    
         if item.itemBoxNum != nil {
-            self.boxNumberLbl.text = "\(item.itemBoxNum!)"
-        } else {
-            self.boxNumberLbl.text = "No"
+            self.boxNumberScanBtnLbl.setTitle("\(item.itemBoxNum!)", forState: UIControlState.Normal)
             
+        } else {
+            
+        //     self.boxNumberScanBtnLbl.setTitle("Add to Box", forState: UIControlState.Normal)
         }
         
         

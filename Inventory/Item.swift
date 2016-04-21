@@ -23,7 +23,9 @@ class Item  {
     private var _itemColor: String?
 
     
-
+    var itemKey: String? {
+        return _itemKey
+    }
     var itemColor: String? {
         return _itemColor
     }
@@ -62,7 +64,8 @@ class Item  {
     }
 
 
-    init(name: String, description: String, category: String, subcategory: String, qty: Int, fragile: Bool, itemInBox: Int, itemColor: String) {
+    init( name: String, description: String, category: String, subcategory: String, qty: Int, fragile: Bool, itemInBox: Int, itemColor: String, key: String) {
+        self._itemKey = key
         self._itemName = name
         self._itemImgUrl = itemImgUrl
         self._itemDescript = description

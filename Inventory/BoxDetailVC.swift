@@ -30,7 +30,6 @@ import ActionSheetPicker_3_0
         
         @IBOutlet weak var statusLbl: UIButton!
         
-        @IBOutlet weak var statusLabel: UIButton!
         
        
         
@@ -41,8 +40,7 @@ import ActionSheetPicker_3_0
             tableView.delegate = self
             tableView.estimatedRowHeight = 115
             
-            let ref = Firebase(url:"https://dinosaur-facts.firebaseio.com/dinosaurs")
-            ref.queryOrderedByChild("boxNum").queryEqualToValue(25)
+            DataService.ds.REF_BOXES.queryOrderedByChild("boxNum").queryEqualToValue(passedBoxNumber)
                 .observeEventType(.ChildAdded, withBlock: { snapshot in
                     
                                      })

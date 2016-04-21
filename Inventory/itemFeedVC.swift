@@ -37,8 +37,10 @@ class itemFeedVC: UIViewController, UITableViewDataSource, UITableViewDelegate,U
             
             if let itemDict = snap.value as? Dictionary<String, AnyObject> {
                 let key = snap.key
+               // print("HERE IS THE KEY: \(key)")
                 let item = Item(itemKey: key, dictionary: itemDict)
                 self.items.append(item)
+                
             }
         }
         
@@ -86,7 +88,23 @@ class itemFeedVC: UIViewController, UITableViewDataSource, UITableViewDelegate,U
          
     }//tableView
     
-   
+    //edit/delete
+//     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+//        if editingStyle == .Delete {
+//            
+//            let dict = items[indexPath.row]
+//            let key = dict.itemName
+//            print("DEBUG TIME")
+//            print(key)
+//            // delete data from firebase
+//            
+//            let catRef = DataService.ds.REF_ITEMS.childByAppendingPath(key)
+//            catRef.removeValue()
+//        }
+//    }
+    
+    
+    
  
     // Mark: Unwind Segues
     @IBAction func saveNewItemBackToFeed(segue:UIStoryboardSegue) {
@@ -95,8 +113,23 @@ class itemFeedVC: UIViewController, UITableViewDataSource, UITableViewDelegate,U
         }
     }
     
+ 
     
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "ToItemDetails" {
+            if let cell = sender as? UITableViewCell {
+                let indexPath = tableView.indexPathForCell(cell)
+                let dict = items[indexPath!.row]
+                let itemKey =  dict.itemKey
+                if let destination = segue.destinationViewController as? itemDetailsVC {
+                    destination.passedItem = (itemKey)!
+                    print("I have the key: \(itemKey)")
+                    }
+                }
+            }
+        }
+ 
     
     }//itemFeedVC
 

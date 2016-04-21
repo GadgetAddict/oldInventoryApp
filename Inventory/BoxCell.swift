@@ -13,7 +13,8 @@ import Firebase
 class BoxCell: UITableViewCell {
     
     var box: Box!
-    
+    var itemRef: String!
+
     @IBOutlet weak var fragileImg: UIImageView!
     @IBOutlet weak var boxNumberLbl: UILabel!
     @IBOutlet weak var boxCatLbl: UILabel!
@@ -34,6 +35,7 @@ class BoxCell: UITableViewCell {
     
     func configureCell(box: Box) {
         self.box = box
+        itemRef = box.boxKey
         self.boxNumberLbl.text = ("\(box.boxNumber)")
        self.boxCatLbl.text = box.boxCategory!
     }

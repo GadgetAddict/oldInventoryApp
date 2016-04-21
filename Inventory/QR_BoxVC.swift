@@ -38,7 +38,9 @@ class QR_BoxVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+   
         
+
         
         //Begin Scanning
         let captureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
@@ -170,13 +172,11 @@ class QR_BoxVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             }
         }
     }
-    
+ 
+
     
     
 }//ViewController
-
-
-
 
 
 

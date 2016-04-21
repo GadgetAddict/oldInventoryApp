@@ -13,12 +13,11 @@ import ActionSheetPicker_3_0
 
 class NewItemVC: UIViewController, UIImagePickerControllerDelegate , UINavigationControllerDelegate {
 
-
- 
+    
     func nameSwitchAction(nameSwitch: UISwitch) {
         if nameSwitch.on {
             customName = false
-            //print("I turned it on")
+            //print("Name will be Category")
             if categoryLbl.text == "Category" {
                 nameField.placeholder = "Set Category"
             } else {
@@ -28,16 +27,21 @@ class NewItemVC: UIViewController, UIImagePickerControllerDelegate , UINavigatio
             
         } else {
             customName = true
-             //print("I turned it off")
+             //print("Must enter item name")
             nameField.text = ""
             nameField.placeholder = "Enter Item Name"
             
         }
     }
     
- 
-    @IBAction func addToBoxBtn(sender: AnyObject) {
     
+    
+    
+    
+    @IBAction func addToBoxBtn(sender: AnyObject) {
+    //make sure form is complete and saved.
+
+        
         
     } // end Send To Box
  
@@ -172,16 +176,20 @@ print("user clicked save")
     }
     
 func itemToFirebase(imgUrl: String?) {
-   
+    
     var item: Dictionary<String, AnyObject> = [
         "itemName" : nameField.text!,
         "itemDescript" : descriptionField.text!,
         "itemFragile" : fragileStatus!,
         "itemCategory" : categoryLbl.text! ,
          "itemSubcategory" :  subCategoryLbl.text! ,
-        "itemQty" : qtyField.text!
+        "itemQty" : qtyField.text!,
+        "itemColor" : colorLbl.text!
 
     ]
+    
+ 
+    
     if imgUrl != nil {
         item["itemImgUrl"] = imgUrl!
     }
@@ -189,12 +197,19 @@ func itemToFirebase(imgUrl: String?) {
     let firebaseItem = DataService.ds.REF_ITEMS.childByAutoId()
     
     firebaseItem.setValue(item)
+    //get the auto-generated key and save it
+     let newItemID = firebaseItem.key
     
+    //clean up
     imageSelected = false
        print("reset ImageSelected to False")
   
+    //add Details to addToBox Class for when its time to relate the new item to a box
+ 
     
-    }   
+    
+    
+    }//end SaveItemToFireBase
  
     // Mark: Unwind Segues
     @IBAction func cancelToNewItemViewController(segue:UIStoryboardSegue) {

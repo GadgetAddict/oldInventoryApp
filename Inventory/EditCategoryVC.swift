@@ -66,7 +66,7 @@ class EditCategoryVC: UITableViewController {
                 firebasePost.setValue(newCat)
  
         
-                // create an initial empty box for new category
+                // create an initial empty box for newly created category
                 
                 let firebaseRef = DataService.ds.REF_BOXES
                 

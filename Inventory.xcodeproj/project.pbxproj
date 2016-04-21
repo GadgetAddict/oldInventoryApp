@@ -49,6 +49,9 @@
 		ADED6E8C1CB17EA200C5F6BF /* BoxFeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADED6E8B1CB17EA200C5F6BF /* BoxFeedVC.swift */; };
 		ADED6E901CB1908000C5F6BF /* WineFeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADED6E8F1CB1908000C5F6BF /* WineFeedVC.swift */; };
 		ADED6FB11CB43A2700C5F6BF /* itemDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADED6FB01CB43A2700C5F6BF /* itemDetailsVC.swift */; };
+		ADF7C70D1CC59279003FD553 /* QR_ItemVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF7C70C1CC59279003FD553 /* QR_ItemVC.swift */; };
+		ADF7C70F1CC7B088003FD553 /* SwiftOverlays.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF7C70E1CC7B088003FD553 /* SwiftOverlays.swift */; };
+		ADF7C7111CC7B102003FD553 /* AnnoyingNotification.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADF7C7101CC7B102003FD553 /* AnnoyingNotification.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -98,6 +101,9 @@
 		ADED6E8B1CB17EA200C5F6BF /* BoxFeedVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoxFeedVC.swift; sourceTree = "<group>"; };
 		ADED6E8F1CB1908000C5F6BF /* WineFeedVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WineFeedVC.swift; sourceTree = "<group>"; };
 		ADED6FB01CB43A2700C5F6BF /* itemDetailsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = itemDetailsVC.swift; sourceTree = "<group>"; };
+		ADF7C70C1CC59279003FD553 /* QR_ItemVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QR_ItemVC.swift; sourceTree = "<group>"; };
+		ADF7C70E1CC7B088003FD553 /* SwiftOverlays.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftOverlays.swift; sourceTree = "<group>"; };
+		ADF7C7101CC7B102003FD553 /* AnnoyingNotification.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnnoyingNotification.xib; path = Inventory/AnnoyingNotification.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				ADBCD7751CA76BA000F70749 /* Main.storyboard */,
+				ADF7C7101CC7B102003FD553 /* AnnoyingNotification.xib */,
 				ADBCD7701CA76BA000F70749 /* Inventory */,
 				ADBCD76F1CA76BA000F70749 /* Products */,
 				4B8ECFECB28B90774E57CECA /* Pods */,
@@ -192,6 +199,7 @@
 		ADBCD7841CA76D0500F70749 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				ADF7C70E1CC7B088003FD553 /* SwiftOverlays.swift */,
 				ADBCD78B1CA825D400F70749 /* DataService.swift */,
 			);
 			name = Services;
@@ -211,6 +219,7 @@
 				ADED6E8F1CB1908000C5F6BF /* WineFeedVC.swift */,
 				AD3724EB1CB6D9A8003BC66A /* addWineVC.swift */,
 				AD59B7241CC0683F0082B50A /* QR_BoxVC.swift */,
+				ADF7C70C1CC59279003FD553 /* QR_ItemVC.swift */,
 				AD59B72B1CC1595B0082B50A /* MainMenuVC.swift */,
 				AD5BE9AD1CC19E78005F917F /* BoxEditDetailsVC.swift */,
 			);
@@ -331,6 +340,7 @@
 				ADBCD77C1CA76BA000F70749 /* LaunchScreen.storyboard in Resources */,
 				ADBCD7791CA76BA000F70749 /* Assets.xcassets in Resources */,
 				ADBCD7771CA76BA000F70749 /* Main.storyboard in Resources */,
+				ADF7C7111CC7B102003FD553 /* AnnoyingNotification.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,6 +411,7 @@
 				AD3725221CB87777003BC66A /* EditCategoryVC.swift in Sources */,
 				ADC9C1C31CBD8C9E00887846 /* Category.swift in Sources */,
 				ADBB29E81CAD7FC70089FAD4 /* styledButton.swift in Sources */,
+				ADF7C70D1CC59279003FD553 /* QR_ItemVC.swift in Sources */,
 				ADED6E8A1CB17E7C00C5F6BF /* WineCell.swift in Sources */,
 				ADBCD78A1CA825B600F70749 /* Constants.swift in Sources */,
 				AD4BD5CF1CAEF21F005BA87E /* Item.swift in Sources */,
@@ -414,6 +425,7 @@
 				ADBCD78C1CA825D400F70749 /* DataService.swift in Sources */,
 				AD59B72C1CC1595B0082B50A /* MainMenuVC.swift in Sources */,
 				AD3724F81CB71696003BC66A /* colorsVC.swift in Sources */,
+				ADF7C70F1CC7B088003FD553 /* SwiftOverlays.swift in Sources */,
 				ADED6FB11CB43A2700C5F6BF /* itemDetailsVC.swift in Sources */,
 				AD3725261CB9A58E003BC66A /* SubcategoryVC.swift in Sources */,
 				AD3724EC1CB6D9A8003BC66A /* addWineVC.swift in Sources */,

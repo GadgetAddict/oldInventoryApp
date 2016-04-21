@@ -86,14 +86,22 @@ strip_invalid_archs() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-Inventory/ActionSheetPicker_3_0.framework"
   install_framework "Pods-Inventory/Alamofire.framework"
+  install_framework "Pods-Inventory/BubbleTransition.framework"
+  install_framework "Pods-Inventory/Canvas.framework"
   install_framework "Pods-Inventory/Cosmos.framework"
+  install_framework "Pods-Inventory/ExpandingMenu.framework"
   install_framework "Pods-Inventory/Firebase.framework"
   install_framework "Pods-Inventory/IQKeyboardManagerSwift.framework"
+  install_framework "Pods-Inventory/SwiftOverlays.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-Inventory/ActionSheetPicker_3_0.framework"
   install_framework "Pods-Inventory/Alamofire.framework"
+  install_framework "Pods-Inventory/BubbleTransition.framework"
+  install_framework "Pods-Inventory/Canvas.framework"
   install_framework "Pods-Inventory/Cosmos.framework"
+  install_framework "Pods-Inventory/ExpandingMenu.framework"
   install_framework "Pods-Inventory/Firebase.framework"
   install_framework "Pods-Inventory/IQKeyboardManagerSwift.framework"
+  install_framework "Pods-Inventory/SwiftOverlays.framework"
 fi

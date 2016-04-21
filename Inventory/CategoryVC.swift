@@ -45,6 +45,7 @@ class CategoryVC: UITableViewController {
         if editingStyle == .Delete {
             
             let dict = items[indexPath.row]
+          
             let name = dict["catName"] as! String
             
             // delete data from firebase
